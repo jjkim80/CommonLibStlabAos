@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dkitec.commonlib_stalb_aos.retrofit.RetrofitActivity;
 import com.dkitec.commonlib_stalb_aos.utils.Logger;
 import com.dkitec.commonlib_stalb_aos.utils.Popup;
 import com.dkitec.commonlib_stalb_aos.webview.WebViewActivity;
@@ -16,6 +17,7 @@ import com.dkitec.commonlib_stalb_aos.webview.WebViewActivity;
 public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Button webviewButton;
+    private Button retrofitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
                 startActivity(intent);
             }
+        });
+
+        retrofitButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, RetrofitActivity.class);
+            startActivity(intent);
         });
 
         Logger.d("MainActivity");

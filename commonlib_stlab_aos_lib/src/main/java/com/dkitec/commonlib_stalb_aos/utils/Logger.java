@@ -1,8 +1,13 @@
 package com.dkitec.commonlib_stalb_aos.utils;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.dkitec.commonlib_stalb_aos.BaseApplication;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * 로그에 관련된 클래스
@@ -13,6 +18,10 @@ import com.dkitec.commonlib_stalb_aos.BaseApplication;
  */
 public class Logger {
 
+    public static final boolean isRetrofitLog = true;
+    public static final boolean isRequestHeaderLog = false;
+    public static final boolean isResponseHeaderLog = false;
+    public static final boolean isTestToastEnable = false;
     private static final boolean isLogPrint = BaseApplication.DEBUG ? true : false;
     private static final String TAG = "dkitec";
     private static final int MAX_INDEX = 2000;
@@ -21,6 +30,28 @@ public class Logger {
     private static final int LOG_INFO = 2;
     private static final int LOG_WARN = 3;
     private static final int LOG_ERROR = 4;
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    /**
+     * 현재 디버그모드여부를 리턴
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isDebuggable(Context context) {
+        boolean debuggable = false;
+
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo appinfo = pm.getApplicationInfo(context.getPackageName(), 0);
+            debuggable = (0 != (appinfo.flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        } catch (PackageManager.NameNotFoundException e) {
+            /* debuggable variable will remain false */
+        }
+
+        return debuggable;
+    }
+
 
     public static synchronized void d() {
         if (isLogPrint) dLong("", LOG_DEBUG);
