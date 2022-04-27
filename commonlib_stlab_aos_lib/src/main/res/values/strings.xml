@@ -4,4 +4,11 @@
     <string name="ok">OK</string>
     <string name="error">Error</string>
     <string name="oops">Oops</string>
+
+    <string-array name="encrypt_array">
+        <item>Base64</item>
+        <item>AES128/256</item>
+        <item>RSA</item>
+        <item>SHA-256</item>
+    </string-array>
 </resources>

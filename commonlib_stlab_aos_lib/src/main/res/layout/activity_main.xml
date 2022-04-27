@@ -16,4 +16,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/retrofitButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go Retrofit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/webviewButton" />
+
+    <Button
+        android:id="@+id/encryptionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Encryption"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/retrofitButton"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

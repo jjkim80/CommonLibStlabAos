@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Button webviewButton;
     private Button retrofitButton;
+    private Button encryptionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         webviewButton = findViewById(R.id.webviewButton);
+        retrofitButton = findViewById(R.id.retrofitButton);
+        encryptionButton = findViewById(R.id.encryptionButton);
+
         webviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         retrofitButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, RetrofitActivity.class);
+            startActivity(intent);
+        });
+
+        encryptionButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, EncryptionActivity.class);
             startActivity(intent);
         });
 
