@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dkitec.commonlib_stalb_aos.utils.AESEncType;
 import com.dkitec.commonlib_stalb_aos.utils.HashUtils;
 import com.dkitec.commonlib_stalb_aos.utils.Logger;
 
@@ -65,20 +66,26 @@ public class EncryptionActivity extends AppCompatActivity implements AdapterView
         PrivateKey privateKey = keyPair.getPrivate();
 
         btnEncode.setOnClickListener(view -> {
-            Editable encryptText = inputEncryptText.getText();
+            String encryptText = inputEncryptText.getText().toString();
             int selectItem = spinner.getSelectedItemPosition();
             Logger.d("selectItem :" + selectItem);
             switch (selectItem) {
                 case 0:
-                    encryptTextView.setText(hashUtils.getBase64Encrypt(encryptText.toString()));
+                    encryptTextView.setText(hashUtils.getBase64Encrypt(encryptText));
                     break;
                 case 1:
-                    encryptTextView.setText(hashUtils.setAESEncrypt(encryptText.toString()));
+                    encryptTextView.setText(hashUtils.getAESEncrypt(encryptText, AESEncType.AES_128));
                     break;
                 case 2:
+                    encryptTextView.setText(HashUtils.getAESEncrypt(encryptText, AESEncType.AES_192));
+                    break;
+                case 3:
+                    encryptTextView.setText(HashUtils.getAESEncrypt(encryptText, AESEncType.AES_256));
+                    break;
+                case 4:
                     String encrypted = null;
                     try {
-                        encrypted = hashUtils.encryptRSA(encryptText.toString(), publicKey);
+                        encrypted = hashUtils.encryptRSA(encryptText, publicKey);
                         encryptTextView.setText(encrypted);
                     } catch (NoSuchPaddingException e) {
                         e.printStackTrace();
@@ -92,8 +99,8 @@ public class EncryptionActivity extends AppCompatActivity implements AdapterView
                         e.printStackTrace();
                     }
                     break;
-                case 3:
-                    encryptTextView.setText(hashUtils.getEncryptData(encryptText.toString()));
+                case 5:
+                    encryptTextView.setText(hashUtils.getEncryptData(encryptText));
                     break;
                 default:
                     Logger.d("해당없음");
@@ -103,16 +110,21 @@ public class EncryptionActivity extends AppCompatActivity implements AdapterView
 
         btnDecode.setOnClickListener(view -> {
             int selectItem = spinner.getSelectedItemPosition();
+            String decryptText = encryptTextView.getText().toString();
             switch (selectItem) {
                 case 0:
                     encryptTextView.setText(hashUtils.getBase64Decrypt(encryptTextView.getText().toString()));
                     break;
                 case 1:
-                    String encryptedText = (String) encryptTextView.getText();
-                    encryptTextView.setText(hashUtils.setAESDecrypt(encryptedText));
+                    encryptTextView.setText(HashUtils.getAESDecrypt(decryptText, AESEncType.AES_128));
                     break;
-
                 case 2:
+                    encryptTextView.setText(HashUtils.getAESDecrypt(decryptText, AESEncType.AES_192));
+                    break;
+                case 3:
+                    encryptTextView.setText(HashUtils.getAESDecrypt(decryptText, AESEncType.AES_256));
+                    break;
+                case 4:
                     String decrypted = null;
                     try {
                         decrypted = hashUtils.decryptRSA(encryptTextView.getText().toString(), privateKey);
@@ -131,7 +143,7 @@ public class EncryptionActivity extends AppCompatActivity implements AdapterView
                         e.printStackTrace();
                     }
                     break;
-                case 3:
+                case 5:
                     Toast.makeText(this, "복호화 불가능", Toast.LENGTH_SHORT).show();
                     break;
                 default:

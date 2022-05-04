@@ -29,7 +29,9 @@ public class HashUtils {
     //AES
     public static String Alg = "AES/CBC/PKCS5Padding";
     public static String PK = "01234567890123456789012345678901"; //32byte
-    public static String IV = PK.substring(0, 16); //16byte
+    public static String IV128 = PK.substring(0, 16); //16byte
+    public static String IV192 = PK.substring(0, 24);
+    public static String IV256 = PK.substring(0, 32);
 
     //RSA
     public static final int KEY_SIZE = 1024;
@@ -59,26 +61,42 @@ public class HashUtils {
         return new String(Base64.decode(data, 0));
     }
 
-    public String setAESEncrypt(String data) {
+    public static String getAESEncrypt(String data, AESEncType encType) {
         try {
-            Cipher cipher = Cipher.getInstance(Alg);
-            SecretKeySpec keySpec = new SecretKeySpec(IV.getBytes(), "AES");
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(IV.getBytes());
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec);
+            byte[] secretKeySpec = IV128.getBytes();
 
+            if (encType == AESEncType.AES_192) {
+                secretKeySpec = IV192.getBytes();
+            } else if (encType == AESEncType.AES_256) {
+                secretKeySpec = IV256.getBytes();
+            }
+
+            Cipher cipher = Cipher.getInstance(Alg);
+            SecretKeySpec keySpec = new SecretKeySpec(secretKeySpec, "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(IV128.getBytes(StandardCharsets.UTF_8));
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec);
             byte[] encrypted = cipher.doFinal(data.getBytes("UTF-8"));
             return Base64.encodeToString(encrypted, 0);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(e.getMessage());
         }
         return data;
     }
 
-    public String setAESDecrypt(String data) {
+    public static String getAESDecrypt(String data, AESEncType encType) {
         try {
+            byte[] secretKeySpec = IV128.getBytes();
+
+            if (encType == AESEncType.AES_192) {
+                secretKeySpec = IV192.getBytes();
+            } else if (encType == AESEncType.AES_256) {
+                secretKeySpec = IV256.getBytes();
+            }
+
             Cipher cipher = Cipher.getInstance(Alg);
-            SecretKeySpec keySpec = new SecretKeySpec(IV.getBytes(), "AES");
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(IV.getBytes());
+            SecretKeySpec keySpec = new SecretKeySpec(secretKeySpec, "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(IV128.getBytes(StandardCharsets.UTF_8
+            ));
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParameterSpec);
             byte[] decodeBytes = Base64.decode(data, 0);
             byte[] decrypted = cipher.doFinal(decodeBytes);
